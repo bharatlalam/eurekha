@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capsule Locations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Light gradient background animation */
+    body {
+      background: linear-gradient(120deg, #dbeafe, #bae6fd, #f0f9ff, #e0f2fe);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Map container */
+    .map {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: url("https://i.ibb.co/3r1gkM1/map-grid.png") repeat;
+      background-size: 40px 40px;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    /* Capsule markers */
+    .capsule {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: transform 4s ease-in-out; /* slower movement */
+    }
+    .capsule:hover {
+      transform: scale(1.2);
+    }
+    .working {
+      background-color: #22c55e; /* green */
+      box-shadow: 0 0 10px #22c55e;
+    }
+    .free {
+      background-color: #ef4444; /* red */
+      box-shadow: 0 0 10px #ef4444;
+    }
+  </style>
+</head>
+<body class="text-gray-800 min-h-screen flex justify-center items-start p-10">
+
+  <!-- Main Content -->
+  <div class="w-full max-w-5xl space-y-10">
+
+    <h2 class="text-4xl font-bold mb-6 tracking-wide text-center">📍 Capsule Locations</h2>
+    
+    <!-- Capsule Status Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-lg p-8 hover:shadow-2xl hover:scale-105 transform transition">
+        <h3 class="text-xl font-semibold text-gray-700">🟢 Working Capsules</h3>
+        <p id="workingCapsules" class="text-5xl font-bold mt-3 text-green-600">3</p>
+      </div>
+      <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-lg p-8 hover:shadow-2xl hover:scale-105 transform transition">
+        <h3 class="text-xl font-semibold text-gray-700">🔴 Free Capsules</h3>
+        <p id="freeCapsules" class="text-5xl font-bold mt-3 text-red-600">2</p>
+      </div>
+    </div>
+
+    <!-- Capsule Table -->
+    <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-lg p-8">
+      <h3 class="text-2xl font-semibold mb-4 text-gray-700">📊 Current Capsule Positions</h3>
+      <table class="w-full border-collapse rounded-xl overflow-hidden">
+        <thead>
+          <tr class="bg-blue-100 text-gray-800">
+            <th class="p-3 border">Capsule ID</th>
+            <th class="p-3 border">Location</th>
+            <th class="p-3 border">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr class="hover:bg-blue-50 transition">
+            <td class="p-3 border">C-101</td>
+            <td class="p-3 border">Sector 5</td>
+            <td class="p-3 border text-green-600 font-bold">Working</td>
+          </tr>
+          <tr class="hover:bg-blue-50 transition">
+            <td class="p-3 border">C-102</td>
+            <td class="p-3 border">Sector 9</td>
+            <td class="p-3 border text-red-600 font-bold">Free</td>
+          </tr>
+          <tr class="hover:bg-blue-50 transition">
+            <td class="p-3 border">C-103</td>
+            <td class="p-3 border">Sector 2</td>
+            <td class="p-3 border text-green-600 font-bold">Working</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Visual Map -->
+    <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-lg p-8">
+      <h3 class="text-2xl font-semibold mb-6 text-gray-700">🗺️ Map of Capsule Locations</h3>
+      <div id="map" class="map"></div>
+    </div>
+
+    <!-- Assign Capsule Section -->
+    <div class="bg-white/70 backdrop-blur-lg rounded-2xl shadow-lg p-8">
+      <h3 class="text-2xl font-semibold mb-4 text-gray-700">📌 Assign Capsule to Location</h3>
+      <form onsubmit="assignCapsule(event)">
+        <div class="flex flex-col md:flex-row gap-4">
+          <input type="text" id="capsuleId" placeholder="Capsule ID" class="p-3 border rounded-lg flex-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <input type="text" id="capsuleLocation" placeholder="Location" class="p-3 border rounded-lg flex-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button type="submit" class="bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-3 rounded-xl shadow-md text-white font-semibold hover:scale-105 transition">Assign</button>
+        </div>
+      </form>
+      <p id="assignMessage" class="text-green-600 font-semibold mt-3 hidden">✅ Capsule Assigned Successfully!</p>
+    </div>
+  </div>
+
+  <script>
+    const map = document.getElementById("map");
+    let capsules = [];
+
+    // Initial capsules
+    const initialCapsules = [
+      { id: "C-101", status: "working" },
+      { id: "C-102", status: "free" },
+      { id: "C-103", status: "working" }
+    ];
+
+    function placeCapsule(capsuleData) {
+      const capsule = document.createElement("div");
+      capsule.className = `capsule ${capsuleData.status}`;
+      capsule.innerText = capsuleData.id;
+      capsule.style.top = Math.random() * 350 + "px";
+      capsule.style.left = Math.random() * 550 + "px";
+      map.appendChild(capsule);
+      capsules.push(capsule);
+    }
+
+    // Animate capsules randomly with slower speed
+    function moveCapsules() {
+      capsules.forEach(capsule => {
+        const newX = Math.random() * 550;
+        const newY = Math.random() * 350;
+        capsule.style.top = newY + "px";
+        capsule.style.left = newX + "px";
+      });
+    }
+
+    // Auto-place initial capsules
+    initialCapsules.forEach(c => placeCapsule(c));
+
+    // Move capsules every 6s for slower effect
+    setInterval(moveCapsules, 6000);
+
+    function assignCapsule(event) {
+      event.preventDefault();
+      document.getElementById("assignMessage").classList.remove("hidden");
+
+      const id = document.getElementById("capsuleId").value;
+      const location = document.getElementById("capsuleLocation").value;
+
+      if (id && location) {
+        placeCapsule({ id: id, status: "working" });
+      }
+    }
+  </script>
+
+</body>
+</html>

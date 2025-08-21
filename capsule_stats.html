@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capsule Stats</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
+      display: flex;
+      flex-direction: column;
+      color: #1f2937;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      letter-spacing: 1px;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1100px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: #fff;
+      background: #2563eb;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      text-align: center;
+      transition: 0.3s;
+      grid-column: span 2;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(37,99,235,0.4);
+    }
+
+    .back-link:hover {
+      background: #1d4ed8;
+      box-shadow: 0 6px 20px rgba(37,99,235,0.5);
+    }
+
+    .card {
+      background: #ffffffdd;
+      border-radius: 20px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      color: #1e3a8a;
+      margin-bottom: 0.8rem;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: #334155;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 4px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 8px;
+      width: 0;
+      transition: width 1.5s ease, background 0.5s ease;
+    }
+
+    .status {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      color: #475569;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      margin-top: auto;
+    }
+
+    @media(max-width: 900px){
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Extra feature badges */
+    .extra-features {
+      margin-top: 0.8rem;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .feature {
+      background: #f87171;
+      color: #fff;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    🚀 Capsule Statistics Dashboard
+  </header>
+
+  <div class="container">
+    <a href="dashboard.html" class="back-link">⬅️ Back to Dashboard</a>
+
+    <!-- Capsule Cards -->
+    <div class="card" data-oxygen="85" data-battery="78" data-capacity="3">
+      <h2>Capsule C-101</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">Moderate Working</span></div>
+      <div class="extra-features">
+        <span class="feature">Mirror Broken</span>
+        <span class="feature">Low Pressure</span>
+      </div>
+    </div>
+
+    <div class="card" data-oxygen="60" data-battery="45" data-capacity="2">
+      <h2>Capsule C-102</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">⚠️ Weak</span></div>
+      <div class="extra-features">
+        <span class="feature">Mirror Broken</span>
+      </div>
+    </div>
+
+    <div class="card" data-oxygen="90" data-battery="95" data-capacity="4">
+      <h2>Capsule C-103</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">✅ Working</span></div>
+      <div class="extra-features">
+        <span class="feature">sensor effected</span>
+      </div>
+    </div>
+
+    <div class="card" data-oxygen="70" data-battery="50" data-capacity="3">
+      <h2>Capsule C-104</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">⚠️ Weak</span></div>
+      <div class="extra-features">
+        <span class="feature">seal Broken</span>
+        <span class="feature">Low Pressure</span>
+      </div>
+    </div>
+
+    <div class="card" data-oxygen="95" data-battery="80" data-capacity="5">
+      <h2>Capsule C-105</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">✅ Working</span></div>
+      <div class="extra-features">
+        <span class="feature">Mirror Broken</span>
+      </div>
+    </div>
+
+    <div class="card" data-oxygen="65" data-battery="55" data-capacity="2">
+      <h2>Capsule C-106</h2>
+      <div class="stat">Oxygen Level: <span class="oxygen">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill oxygen-fill"></div></div>
+      <div class="stat">Battery: <span class="battery">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill battery-fill"></div></div>
+      <div class="stat">Capacity Left: <span class="capacity">0 People</span></div>
+      <div class="stat">Communication: <span class="status">⚠️ Weak</span></div>
+      <div class="extra-features">
+        <span class="feature">Low Pressure</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2025 Flood Capsule Project | Capsule Statistics
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      const oxygenFill = card.querySelector('.oxygen-fill');
+      const batteryFill = card.querySelector('.battery-fill');
+      const oxygenText = card.querySelector('.oxygen');
+      const batteryText = card.querySelector('.battery');
+      const capacityText = card.querySelector('.capacity');
+      const statusText = card.querySelector('.status');
+
+      const oxygenTarget = parseInt(card.dataset.oxygen);
+      const batteryTarget = parseInt(card.dataset.battery);
+      const capacityTarget = parseInt(card.dataset.capacity);
+
+      // Animate to target values
+      let oxy = 0, bat = 0, cap = 0;
+      const animate = setInterval(() => {
+        if(oxy < oxygenTarget) oxy++;
+        if(bat < batteryTarget) bat++;
+        if(cap < capacityTarget) cap++;
+        oxygenFill.style.width = oxy + "%";
+        batteryFill.style.width = bat + "%";
+        oxygenText.textContent = oxy + "%";
+        batteryText.textContent = bat + "%";
+        capacityText.textContent = cap + " People";
+
+        // Color based on level
+        oxygenFill.style.background = oxy > 70 ? "#22c55e" : (oxy > 40 ? "#facc15" : "#ef4444");
+        batteryFill.style.background = bat > 70 ? "#22c55e" : (bat > 40 ? "#facc15" : "#ef4444");
+
+        // Status based on lowest level
+        statusText.textContent = (oxy < 50 || bat < 40) ? "⚠️ Weak" : "✅ Working";
+
+        if(oxy >= oxygenTarget && bat >= batteryTarget && cap >= capacityTarget){
+          clearInterval(animate);
+        }
+      }, 20);
+    });
+  </script>
+</body>
+</html>
